@@ -3,8 +3,8 @@ requires = ["setuptools>=74.1.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "homework1"
-description = "Set operations and unit testing with pytest for BYU CS 236"
+name = "homework2"
+description = "Functions, functions, and not functions for BYU CS 236"
 version = "0.0.1"
 readme = "README.md"
 requires-python = ">=3.11"
