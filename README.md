@@ -25,7 +25,8 @@ By the end of this assignment, you should be able to:
 - Recognize how object methods can hide the inputs and outputs in a mathematical function and learn how to rewrite methods functionally
 - Review how to use `pytest` to run and organize tests from the terminal and VS Code testing panel
 - Review how to set up and manage Python projects using `pyproject.toml` and virtual environments (`venv`)
-- Review how to tell VSCode to use the Python interpreter from the virtual environment
+- Review how to tell VS Code to use the Python interpreter from the virtual environment
+- **New:** Understand what **mypy** (a static type checker) does, why we use it to reduce the number of runtime type-checking tests, and how to run it.
 
 ---
 
@@ -45,7 +46,7 @@ homework2/
 
 ---
 
-## 2.0 Setup Instructions
+## 2 Setup Instructions
 
 1. Clone your starter repo into the `CS236/` folder.
 
@@ -100,7 +101,7 @@ This project’s `pyproject.toml` installs `pytest` automatically. It also insta
 
 ---
 
-## 3.0 Definitions: Function vs. Partial Function
+## 3 Definitions: Function vs. Partial Function
 
 Let:
 
@@ -108,8 +109,7 @@ Let:
 - $C$ be the **codomain** (a set of possible outputs), and
 - $f$ be a **mapping** represented as a set of ordered pairs $ f \subseteq D \times C $
 
-# TODO
-Talk about what these ordered pairs look like and how to interpret them
+**Interpreting ordered pairs.** We represent a mapping as a **set of tuples** like `{(x, y)}` where each `x` is an element of the domain and each `y` is an element of the codomain. For example, with `D = {1,2}` and `C = {'a','b'}`, the relation `f = {(1,'a'), (2,'b')}` maps `1 → 'a'` and `2 → 'b'`.
 
 ---
 
@@ -124,7 +124,7 @@ A mapping $ f $ is a **function** if:
 
 ---
 
-### ⚠️ Partial Function
+### 3.2 Partial Function
 
 A mapping $ f $ is a **partial function** if:
 
@@ -135,7 +135,7 @@ A mapping $ f $ is a **partial function** if:
 
 ---
 
-### ❌ Not a Function
+### 3.3 Not a Function
 
 A mapping is **not a function** if:
 
@@ -156,9 +156,21 @@ Let:
 
 ---
 
-## 🧪 Tests
+## 4. Tests
 
-Open the file `tests\test_classify_function.py` and look at the tests. The math behind the first five tests is:
+**How to run tests from the terminal**
+
+```bash
+pytest
+```
+
+**How to run tests in VS Code**
+
+- Open the **Testing** panel (beaker icon).
+- If prompted, choose **Python: Configure Tests** → **pytest** → test folder `tests/`.
+- Click **Run All Tests**.
+
+Open the file `tests/test_classify_function.py` and look at the tests. The math behind the first five tests is:
 
 - $D=\{1,2,3\}$, $C=\{a, b, c\}$, and $f = \{(1,a), (2,b), (3,c)\}$ is a function.
 - $D=\{1,2,3\}$, $C=\{a, b, c\}$, and $f = \{(1,a), (3,c)\}$ is a partial function.
@@ -166,25 +178,19 @@ Open the file `tests\test_classify_function.py` and look at the tests. The math 
 - $D=\emptyset$, $C=\{a, b\}$, and $f = \emptyset$ is a function.
 - $D=\{1, 2, 3\}$, $C=\{a, b, c\}$, and $f = \emptyset$ is a partial function.
 
-Note that the last two examples are edge cases that test what happens when the domain is empty or the mapping is empty.
-
----
-Open the file `tests\test_classify_function_typechecks.py`. We split the tests into two files to make it easier to track the different kinds of tests. This file contains tests that check whether there are elements of the tuples that don't appear in the domain or codomain, which would violate the definitions of functions, partial functions, and even mappings from the domain to the codomain. This file also tests whether the elements of the domain, codomain, and tuples in the mapping are either strings or integers.
-
+> We also provide `tests/test_classify_function_typechecks.py`, which checks that every first component of a tuple is in the domain, every second component is in the codomain, and that elements are `int` or `str`.
 
 ---
 
-## 🚀 Your Task
+## 5. Your Task
 
-Implement the function `classify_function(...)` in `src/homework2/classify_function.py`. The first input to the function will now be a **set of tuples** — each tuple represents a pair of an input and output.
+Implement the function `classify_function(...)` in `src/homework2/classify_function.py`. The first input to the function is a **set of tuples** — each tuple represents a pair `(input, output)`.
 
 Return one of the following strings:
 
 - `"function"` if the relation maps each domain element to exactly one codomain element
 - `"partial function"` if the relation maps some (but not all) domain elements to codomain elements, without duplication
 - `"not a function"` if any domain element maps to more than one codomain element
-
----
 
 Run tests with:
 
@@ -196,13 +202,11 @@ or use the **Testing panel** in VS Code.
 
 ---
 
-## 🔄 Methods, Side Effects, and Mathematical Functions
+## 6. Methods, Side Effects, and Mathematical Functions
 
 In this course, we’ll emphasize writing code that behaves like **mathematical functions**: inputs go in, outputs come out — without hidden behavior (side effects). But most Python objects use **methods**, which can hide both inputs and outputs inside the object.
 
----
-
-### ✅ Example: Method with a Side Effect
+### 6.1 Example: Method with a Side Effect
 
 ```python
 class Logger:
@@ -214,49 +218,20 @@ class Logger:
         return len(message)
 ```
 
-Let’s model this **mathematically**.
+Mathematically, this method’s transformation is:
 
-- The method takes:
-  - `self.history` (hidden input)
-  - `message` (explicit input)
-
-- The method returns:
-  - `len(message)` (explicit output)
-  - but it also changes `self.history` (hidden output)
-
-So the method can be thought of as a function:
-
-```math
-f: (history, message) → (history', length)
+```text
+(history, message) ↦ (history', length)
 ```
 
-That is:
-
-- **Domain**: pairs `(history, message)`
+- **Domain**: pairs `(history, message)`  
 - **Codomain**: pairs `(updated_history, length)`
 
-Even though Python lets you write:
+### 6.2 Why This Matters
 
-```python
-length = logger.log_and_return_length("hello")
-```
+Hidden state changes can cause bugs (especially across multiple calls or shared objects).
 
-The **actual transformation** includes a change to `logger.history`.
-
----
-
-### ⚠️ Why This Matters
-
-If we care only about outputs, we might miss the fact that the method also modified internal state. This leads to bugs when:
-
-- A method is **called more than once**
-- Or different parts of the program depend on the same object
-
----
-
-### ✅ Functional Design Alternative
-
-We can rewrite this method to avoid side effects by **returning everything that changed**:
+### 6.3 Functional Design Alternative
 
 ```python
 def pure_log_and_return_length(history: list[str], message: str) -> tuple[list[str], int]:
@@ -264,32 +239,66 @@ def pure_log_and_return_length(history: list[str], message: str) -> tuple[list[s
     return new_history, len(message)
 ```
 
-Now the function:
+This makes the full input and output explicit and testable.
 
-```math
-f: (history, message) → (history', length)
+**How to test methods that use object state (TODO guidance):**  
+1) Construct the object; 2) set any relevant fields; 3) call the method and assert on the *return value*; 4) also assert on *updated fields* that represent the hidden output.
+
+---
+
+## 7. mypy: Static Type Checking
+
+`mypy` is a **static type checker** for Python. Instead of waiting for tests to fail at runtime, `mypy` analyzes your code and flags type errors **before** execution. In this course, we use `mypy` so you can write *fewer* runtime type-checking tests while still getting strong guarantees about your code.
+
+### 7.1 Why use mypy?
+
+- Catches type mismatches early (e.g., wrong element types in a set of tuples)
+- Documents code intent with type hints
+- Reduces the need for many runtime type-checking tests
+- Plays well with editors (inline diagnostics, quick jumps)
+
+### 7.2 How to run mypy
+
+From the project root (with your virtual environment activated):
+
+```bash
+mypy .
 ```
 
-is **explicit**, pure, and testable.
+(If your `pyproject.toml` configures mypy to ignore tests, it won’t type-check files in `tests/`.)
+
+### 7.3 Example: What mypy reports without type hints
+
+Consider the following (intentionally stripped) stub in `classify_function.py` with *no* type hints:
+
+```python
+def classify_function(mapping, domain, codomain):
+    raise NotImplementedError("Function not yet implemented.")
+```
+
+Running `mypy .` might produce messages like:
+
+```
+src/homework2/classify_function.py:1: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+src/homework2/classify_function.py:1: note: Use "-> None" if function does not return a value
+Found 1 error in 1 file (checked 1 source file)
+```
+
+Now compare with the fully typed signature we expect in this homework:
+
+```python
+def classify_function(
+    mapping: set[tuple[int | str, int | str]],
+    domain: set[int | str],
+    codomain: set[int | str],
+) -> str:
+    raise NotImplementedError("Function not yet implemented.")
+```
+
+With the typed version in place, `mypy` can validate the *shape* of the mapping and the element types of the domain/codomain, catching mistakes such as using floats or lists in those sets, or mixing tuple sizes.
+
+> Tip: If you see mypy errors about your tests, you can configure mypy in `pyproject.toml` to ignore the `tests/` directory (e.g., `exclude = ["^tests/"]`).
 
 ---
 
-### 🧠 Takeaway
-
-When designing methods, use the mathematical definition of a function to make sure that the code is clear about the following:
-- What is the full **input**? (Not just the arguments, but also the object state)
-- What is the full **output**? (Not just the return value, but also what was modified?)
-
-A **good design** makes this mapping explicit — either through function arguments, return values, or both.
-
----
-
-## 🧠 What You’ve Practiced
-
-- Cloning and configuring a Python project with a virtual environment
-- Installing dependencies (like `pytest`) via `pyproject.toml`
-- Understanding how to model functions and partial functions using **sets of tuples**
-- Running and analyzing a variety of test types to validate both functional correctness and input constraints
-- Rewriting object methods to avoid side effects, using pure function design principles
-
-
+**You’re set!** Use `pytest` to validate behavior and `mypy` to enforce type contracts. Together they give you fast feedback as you implement `classify_function`.
