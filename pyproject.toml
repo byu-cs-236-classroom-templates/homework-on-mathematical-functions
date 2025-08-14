@@ -27,11 +27,11 @@ lint.extend-select = ["I","FIX002", "TD001"]
 target-version = "py312"
 
 [tool.mypy]
-exclude = [
-   "(^|/)tests?/",
-]
+mypy_path = "src"
+python_version = "3.12"
 check_untyped_defs = true
 strict = true
+
 
 
 

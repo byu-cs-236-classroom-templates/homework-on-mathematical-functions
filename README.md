@@ -170,16 +170,6 @@ pytest
 - If prompted, choose **Python: Configure Tests** → **pytest** → test folder `tests/`.
 - Click **Run All Tests**.
 
-Open the file `tests/test_classify_function.py` and look at the tests. The math behind the first five tests is:
-
-- $D=\{1,2,3\}$, $C=\{a, b, c\}$, and $f = \{(1,a), (2,b), (3,c)\}$ is a function.
-- $D=\{1,2,3\}$, $C=\{a, b, c\}$, and $f = \{(1,a), (3,c)\}$ is a partial function.
-- $D=\{1,2,3\}$, $C=\{a, b, c\}$, and $f = \{(1,a), (1,b), (3,c)\}$ is neither a function nor a partial function.
-- $D=\emptyset$, $C=\{a, b\}$, and $f = \emptyset$ is a function.
-- $D=\{1, 2, 3\}$, $C=\{a, b, c\}$, and $f = \emptyset$ is a partial function.
-
-> We also provide `tests/test_classify_function_typechecks.py`, which checks that every first component of a tuple is in the domain, every second component is in the codomain, and that elements are `int` or `str`.
-
 ---
 
 ## 5. Your Task
@@ -220,7 +210,7 @@ class Logger:
 
 Mathematically, this method’s transformation is:
 
-```text
+```
 (history, message) ↦ (history', length)
 ```
 
@@ -241,23 +231,57 @@ def pure_log_and_return_length(history: list[str], message: str) -> tuple[list[s
 
 This makes the full input and output explicit and testable.
 
-**How to test methods that use object state (TODO guidance):**  
-1) Construct the object; 2) set any relevant fields; 3) call the method and assert on the *return value*; 4) also assert on *updated fields* that represent the hidden output.
+---
+
+## 7. Testing Methods that Use Object State
+
+When testing methods that modify object state **and** return values, you need to check both the explicit and implicit outputs.
+
+Example:
+
+```python
+class ScoreKeeper:
+    def __init__(self):
+        self.total_score = 0
+        self.last_added = None
+
+    def add_points(self, points: int) -> int:
+        self.total_score += points
+        self.last_added = points
+        return points
+```
+
+Test:
+
+```python
+def test_add_points() -> None:
+    # Step 1: Instantiate
+    sk = ScoreKeeper()
+    # Step 2: Set state if needed
+    sk.total_score = 10
+    # Step 3: Call method
+    returned = sk.add_points(5)
+    # Step 4: Check return value
+    assert returned == 5
+    # Step 5: Check modified state
+    assert sk.total_score == 15
+    assert sk.last_added == 5
+```
 
 ---
 
-## 7. mypy: Static Type Checking
+## 8. mypy: Static Type Checking
 
 `mypy` is a **static type checker** for Python. Instead of waiting for tests to fail at runtime, `mypy` analyzes your code and flags type errors **before** execution. In this course, we use `mypy` so you can write *fewer* runtime type-checking tests while still getting strong guarantees about your code.
 
-### 7.1 Why use mypy?
+### 8.1 Why use mypy?
 
 - Catches type mismatches early (e.g., wrong element types in a set of tuples)
 - Documents code intent with type hints
 - Reduces the need for many runtime type-checking tests
 - Plays well with editors (inline diagnostics, quick jumps)
 
-### 7.2 How to run mypy
+### 8.2 How to run mypy
 
 From the project root (with your virtual environment activated):
 
@@ -267,16 +291,14 @@ mypy .
 
 (If your `pyproject.toml` configures mypy to ignore tests, it won’t type-check files in `tests/`.)
 
-### 7.3 Example: What mypy reports without type hints
-
-Consider the following (intentionally stripped) stub in `classify_function.py` with *no* type hints:
+### 8.3 Example: What mypy reports without type hints
 
 ```python
 def classify_function(mapping, domain, codomain):
     raise NotImplementedError("Function not yet implemented.")
 ```
 
-Running `mypy .` might produce messages like:
+Running `mypy .` might produce:
 
 ```
 src/homework2/classify_function.py:1: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
@@ -284,7 +306,7 @@ src/homework2/classify_function.py:1: note: Use "-> None" if function does not r
 Found 1 error in 1 file (checked 1 source file)
 ```
 
-Now compare with the fully typed signature we expect in this homework:
+With the typed version:
 
 ```python
 def classify_function(
@@ -295,10 +317,4 @@ def classify_function(
     raise NotImplementedError("Function not yet implemented.")
 ```
 
-With the typed version in place, `mypy` can validate the *shape* of the mapping and the element types of the domain/codomain, catching mistakes such as using floats or lists in those sets, or mixing tuple sizes.
-
-> Tip: If you see mypy errors about your tests, you can configure mypy in `pyproject.toml` to ignore the `tests/` directory (e.g., `exclude = ["^tests/"]`).
-
----
-
-**You’re set!** Use `pytest` to validate behavior and `mypy` to enforce type contracts. Together they give you fast feedback as you implement `classify_function`.
+`mypy` can then validate the structure of the mapping and ensure that all tuple elements and set elements match the declared types.
