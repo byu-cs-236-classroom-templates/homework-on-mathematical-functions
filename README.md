@@ -136,7 +136,7 @@ Return one of the following strings:
 
 The Python function you write must pass each tests. Note that the elements of each set can be either an integer or a string. You can see this in the type hings in the function definition. For example, `domain: set[int | str]`. The vertical `|` represents a logical _or_, so the Python variable `domain` is supposed to be either an integer or a string. 
 
-Complete the Python function in `classify_function.py` so that it passes each test.
+Complete the Python function in `classify_function.py` so that it passes each test. Don't have AI write the function for you, but you can use AI to help you reason through what would be required.
 
 ```bash
 pytest
