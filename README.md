@@ -136,7 +136,7 @@ Return one of the following strings:
 
 The Python function you write must pass each tests. Note that the elements of each set can be either an integer or a string. You can see this in the type hings in the function definition. For example, `domain: set[int | str]`. The vertical `|` represents a logical _or_, so the Python variable `domain` is supposed to be either an integer or a string. 
 
-Complete the Python function in `classify_function.py` so that it passes each test.
+**Complete the Python function** in `classify_function.py` so that it passes each test. You'll be commiting the function to GitHub Classroom, and all the tests will be run. Don't spend too much time on this problem if you get hung up on it; passing all the tests will only be worth 2 points on the homework.
 
 ```bash
 pytest
@@ -144,13 +144,128 @@ pytest
 
 or use the **Testing panel** in VS Code. 
 
+**Commit your code to GitHub Classroom** and use the process from Homework 1 to confirm that your code passed the autograding.
+
 ---
 
-## 6. Methods, Side Effects, and Mathematical Functions
+## 6. mypy: Static Type Checking
+One of the experiences the instructors wanted you to have in writing the function above is the problem of doing all the type-checking. We'll now discuss a tool that you can use to check types. 
+
+
+`mypy` is a **static type checker** for Python. Instead of waiting for tests to fail at runtime, `mypy` analyzes your code and flags type errors **before** execution. In this course, we use `mypy` so you can write *fewer* runtime type-checking tests while still getting strong guarantees about your code.
+
+### 6.1 Why use mypy?
+
+- Catches type mismatches early (e.g., wrong element types in a set of tuples)
+- Documents code intent with type hints
+- Reduces the need for many runtime type-checking tests
+- Plays well with editors (inline diagnostics, quick jumps)
+
+### 6.2 How to run mypy
+
+From the project root (with your virtual environment activated):
+
+```bash
+mypy .
+```
+
+(If your `pyproject.toml` configures mypy to ignore tests, it won’t type-check files in `tests/`.)
+
+### 6.3 Example: What mypy reports without type hints
+
+In this part of the tutorial, you'll explore how `mypy` can reveal missing type hints and type mismatches in your code.
+
+**1. Open `score_keeper.py`**
+
+The file `score_keeper.py` currently contains:
+
+```python
+class ScoreKeeper:
+    def __init__(self) -> None:
+        self.multiplier = 1  # used in calculation
+        self.total_score = 0  # altered in method
+
+    def add_points(self, points: int) -> int:
+        """
+        Add points multiplied by self.multiplier to total_score.
+        Return the amount of points added in this call.
+        """
+        added_points = points * self.multiplier
+        self.total_score += added_points
+        return added_points
+```
+
+Notice that `self.multiplier` and `self.total_score` do not have explicit type hints.
+
+— **Run `mypy`**
+
+From the root of the project, with your virtual environment activated, run:
+
+```bash
+mypy .
+```
+
+You should see warnings similar to:
+
+```
+src/homework2/score_keeper.py:3: error: Need type annotation for 'multiplier'  [var-annotated]
+src/homework2/score_keeper.py:4: error: Need type annotation for 'total_score'  [var-annotated]
+Found 2 errors in 1 file (checked 1 source file)
+```
+
+These warnings tell you that while the method signatures are typed, `mypy` still wants annotations for class attributes when `strict = true` is set in `pyproject.toml`.
+
+**2. Add Type Hints for Attributes**
+
+You can fix the warnings by adding explicit annotations:
+
+```python
+class ScoreKeeper:
+    multiplier: int
+    total_score: int
+
+    def __init__(self) -> None:
+        self.multiplier = 1
+        self.total_score = 0
+```
+
+**3. Introduce a Type Error**
+
+Now, let's see `mypy` catch a type mismatch. Change:
+
+```python
+self.multiplier = 1
+```
+
+to:
+
+```python
+self.multiplier = 0.0
+```
+
+Run `mypy .` again. You should now see:
+
+```
+src/homework2/score_keeper.py:6: error: Incompatible types in assignment (expression has type "float", variable has type "int")  [assignment]
+Found 1 error in 1 file (checked 1 source file)
+```
+
+`mypy` correctly detects that you are assigning a `float` to a variable annotated as an `int`.
+
+
+By using `mypy` in this way, you can catch type problems before running your tests, reducing runtime errors and improving code clarity.
+
+# TODO
+Conclude that this can help us avoid writing all the type checking tests.
+
+
+---
+
+## 7. Methods, Side Effects, and Mathematical Functions
 
 In this course, we’ll emphasize writing code that behaves like **mathematical functions**: inputs go in, outputs come out — without hidden behavior (side effects). But most Python objects use **methods**, which can hide both inputs and outputs inside the object.
 
-### 6.1 Example: Method with a Side Effect
+### 7.1 Example: Method with a Side Effect
 
 ```python
 class Logger:
@@ -171,23 +286,13 @@ Mathematically, this method’s transformation is:
 - **Domain**: pairs `(history, message)`  
 - **Codomain**: pairs `(updated_history, length)`
 
-### 6.2 Why This Matters
+### 7.2 Why This Matters
 
 Hidden state changes can cause bugs (especially across multiple calls or shared objects).
 
-### 6.3 Functional Design Alternative
-
-```python
-def pure_log_and_return_length(history: list[str], message: str) -> tuple[list[str], int]:
-    new_history = history + [message]
-    return new_history, len(message)
-```
-
-This makes the full input and output explicit and testable.
-
 ---
 
-## 7. Testing Methods that Use Object State
+## 8. Testing Methods that Use Object State
 
 When testing methods that modify object state **and** return values, you need to check both the explicit and implicit outputs.
 
@@ -195,7 +300,7 @@ Example:
 
 ```python
 class ScoreKeeper:
-    def __init__(self):
+    def __init__(self) -> None:
         self.total_score = 0
         self.last_added = None
 
@@ -222,53 +327,3 @@ def test_add_points() -> None:
     assert sk.last_added == 5
 ```
 
----
-
-## 8. mypy: Static Type Checking
-
-`mypy` is a **static type checker** for Python. Instead of waiting for tests to fail at runtime, `mypy` analyzes your code and flags type errors **before** execution. In this course, we use `mypy` so you can write *fewer* runtime type-checking tests while still getting strong guarantees about your code.
-
-### 8.1 Why use mypy?
-
-- Catches type mismatches early (e.g., wrong element types in a set of tuples)
-- Documents code intent with type hints
-- Reduces the need for many runtime type-checking tests
-- Plays well with editors (inline diagnostics, quick jumps)
-
-### 8.2 How to run mypy
-
-From the project root (with your virtual environment activated):
-
-```bash
-mypy .
-```
-
-(If your `pyproject.toml` configures mypy to ignore tests, it won’t type-check files in `tests/`.)
-
-### 8.3 Example: What mypy reports without type hints
-
-```python
-def classify_function(mapping, domain, codomain):
-    raise NotImplementedError("Function not yet implemented.")
-```
-
-Running `mypy .` might produce:
-
-```
-src/homework2/classify_function.py:1: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
-src/homework2/classify_function.py:1: note: Use "-> None" if function does not return a value
-Found 1 error in 1 file (checked 1 source file)
-```
-
-With the typed version:
-
-```python
-def classify_function(
-    mapping: set[tuple[int | str, int | str]],
-    domain: set[int | str],
-    codomain: set[int | str],
-) -> str:
-    raise NotImplementedError("Function not yet implemented.")
-```
-
-`mypy` can then validate the structure of the mapping and ensure that all tuple elements and set elements match the declared types.
