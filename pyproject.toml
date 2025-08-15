@@ -31,6 +31,7 @@ mypy_path = "src"
 python_version = "3.12"
 check_untyped_defs = true
 strict = true
+exclude = "(^|/)tests($|/)"
 
 
 

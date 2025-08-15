@@ -1,36 +1,26 @@
-# Homework 2: Functions and Their Properties + Pytest
+# Homework 2: Functions: Mathematic and Python
 
 In this assignment, you’ll explore key concepts from mathematics and computer science related to **functions**, including:
 
 - Domains, codomains, and ranges
 - Total vs. partial functions
 - Valid vs. invalid function definitions
-- How the definition of mathematical functions relates to the methods of an object, with an emphasis on an important programming concept called **side effects**
+- How the definition of mathematical functions relates to the methods of a Python class, with an emphasis on a programming concept called **side effects**
+- How to use the `mypy` tool to check for type errors in Python
 
-You’ll write and evaluate unit tests to validate whether a **set of ordered pairs** represents a function, partial function, or neither. You'll also rewrite a piece of code that has side effects so that it uses functions that avoid side effects.
-
----
-
-## 🧠 Learning Goals
-
-By the end of this assignment, you should be able to:
-
-- Understand the definitions of **functions**, **partial functions**, and **not functions** using mappings, domains, and codomains
-- Represent functions using sets of ordered pairs in Python
-- Model side effects and pure functions using mathematical function notation
-- Review how to write and interpret unit tests:
-  - ✅ Positive tests: verify correct behavior
-  - ❌ Negative tests: catch incorrect behavior
-  - ⚠️ Type-checking tests: verify input/output type constraints and membership in domain/codomain
-- Recognize how object methods can hide the inputs and outputs in a mathematical function and learn how to rewrite methods functionally
-- Review how to use `pytest` to run and organize tests from the terminal and VS Code testing panel
-- Review how to set up and manage Python projects using `pyproject.toml` and virtual environments (`venv`)
-- Review how to tell VS Code to use the Python interpreter from the virtual environment
-- **New:** Understand what **mypy** (a static type checker) does, why we use it to reduce the number of runtime type-checking tests, and how to run it.
+You’ll write a function that takes a **set of ordered pairs** and says whether the ordered represent a function, partial function, or neither. You'll also review how to run unit tests and how to do passoffs in GitHub Classroom. Finally, you'll learn how to write unit tests when your class has methods that rely on class member variables.
 
 ---
 
 ## 1.0 Project Structure
+Clone the project into VS Code and configure it by doing the following steps:
+- install and activate `venv` 
+- install the project (e.g., `pip install --editable ".[dev]"`)
+- configure VS Code so that it can run tests by
+  - Navigating to _View_ -> _Command Palette_ -> _Python: Select Interpreter_ and choosing the interpreter that is running in the virtual environment (e.g., `Python 3.12.5 (.venv)`)
+  - Opening the Testing Panel in VS Code (the beaker) and configuring tests to use `pytest` and the `tests` directory.
+
+This homework uses the following project structure.
 
 ```
 homework2/
@@ -39,69 +29,22 @@ homework2/
 ├── src/
 │   └── homework2/
 │       ├── __init__.py
-│       └── classify_function.py
+|       ├── classify_function.py
+│       └── score_keeper.py
 └── tests/
-    └── test_classify_function.py
+|   ├── test_classify_function_typechecks
+|   ├── test_classify_function.py
+|   └── test_score_keeper.py
 ```
 
----
-
-## 2 Setup Instructions
-
-1. Clone your starter repo into the `CS236/` folder.
-
-2. **Deactivate Conda (if active)**  
-   If your terminal prompt starts with `(base)` or another environment name in parentheses, you’re likely in a conda environment. To deactivate conda:
-
-   ```bash
-   conda deactivate
-   ```
-
-3. **Create a Virtual Environment**
-
-   - **On Windows**:
-     ```bash
-     python -m venv .venv
-     ```
-
-   - **On macOS/Linux**:
-     ```bash
-     python3 -m venv .venv
-     ```
-
-   This creates a local `.venv/` directory in your project folder.
-
-4. **Activate the Virtual Environment**
-
-   - **On Windows (PowerShell)**:
-     ```bash
-     .venv\Scripts\Activate.ps1
-     ```
-
-   - **On macOS/Linux**:
-     ```bash
-     source .venv/bin/activate
-     ```
-
-   Once activated, your prompt should now start with `(.venv)` — this means your virtual environment is working.
-
-5. **Install your project locally** (with dependencies):
-
-   - **On Windows**:
-     ```bash
-     pip install --editable ".[dev]"
-     ```
-
-   - **On macOS/Linux**:
-     ```bash
-     pip3 install --editable ".[dev]"
-     ```
-
-This project’s `pyproject.toml` installs `pytest` automatically. It also installs a tool called `mypy` that we'll use so that we don't have to write so many type-checking tests.
+We'll look at both modules in `src/homework2`, and we'll work with all the test modules in `tests`.
 
 ---
 
 ## 3 Definitions: Function vs. Partial Function
+
+### 3.1 Domain, Codomain, Cartesian Product
+Let's begin with a review of the definitions for a function and a partial function.
 
 Let:
 
@@ -109,9 +52,6 @@ Let:
 - $C$ be the **codomain** (a set of possible outputs), and
 - $f$ be a **mapping** represented as a set of ordered pairs $ f \subseteq D \times C $
 
-**Interpreting ordered pairs.** We represent a mapping as a **set of tuples** like `{(x, y)}` where each `x` is an element of the domain and each `y` is an element of the codomain. For example, with `D = {1,2}` and `C = {'a','b'}`, the relation `f = {(1,'a'), (2,'b')}` maps `1 → 'a'` and `2 → 'b'`.
-
----
 
 ### 3.1 Function
 
@@ -122,7 +62,13 @@ A mapping $ f $ is a **function** if:
 
 > In other words, **every input has one and only one output**
 
----
+Notice that we are defining the function using a subset of ordered pairs. For example, with $D = \{1,2\}$ and $C = \{'a','b'\}$, we can define a function as $f = \{(1,'a'), (2,'b')\}$ which is a subset of all the possible ordered pairs that could appear in the Cartesian product $D\times C$. This function maps `1 → 'a'` and `2 → 'b'`. You might be most familiar with writing this function as
+$$ 
+     f(1) = 'a'\\
+     f(2) = 'b'
+$$
+The first element of the ordered pair goes inside the parentheses and the second element of the ordered pair is the value that the function produces, $f($ first element $) = $ second element
+
 
 ### 3.2 Partial Function
 
@@ -133,7 +79,6 @@ A mapping $ f $ is a **partial function** if:
 
 > That is, **some inputs might not be used**, but **none are duplicated**
 
----
 
 ### 3.3 Not a Function
 
@@ -142,9 +87,7 @@ A mapping is **not a function** if:
 - Any input in the domain appears more than once in the mapping with different outputs
 - That is, a single input maps to multiple values
 
----
-
-### Example:
+### 3.4 Examples
 
 Let:
 - $ D = \{1, 2, 3 \} $
@@ -154,21 +97,30 @@ Let:
 - **Partial function**: $ f = \{(1, a), (3, c) \}$
 - **Not a function**: $ f = \{(1, a), (1, b), (2, c)\} $
 
+### 3.5 Edge Cases
+
+You are going to write a Python function that takes a set of ordered pairs and classifies it as a function, partial function, or neither. That Python function needs to handle the following two edge cases.
+
+1. $D=\emptyset$, $C \neq \emptyset$, and $f = \emptyset$. The domain is empty, the codomain is not empty, and the mapping in the tuples is empty. Notice that $f$ has to be the emptyset since $D\times C = \emptyset \times C = \emptyset$, and the only subset of the empty set is the empty set itself. 
+
+    The mapping $f$ in this problem **is a function** because each element of the domain is only appears once in $f$, which is trivially true since both $D$ and $f = \emptyset$. (This reasoning can be a little tricky, but we'll return to this kind of reasoning later in the class when we discuss propositional logic.)
+1. $D\neq \emptyset$, $C \neq\emptyset$, $f = \emptyset$. The domain is not empty, the codomain is not empty, but the mapping is empty. 
+
+   The mapping $f$ in this problem **is a partial function** because there are elements of the domain that do not appear in the tuples in $f$ (since there are no tuples in $f$).
+    
+1. $D\neq \emptyset$, $C =\emptyset$, $f = \emptyset$. The domain is not empty, the codomain is empty, and the mapping $f$ is empty. 
+    
+    The mapping $f$ in this problem **is a partial function** for the same reason as the example just above.
+
 ---
 
-## 4. Tests
+## 4. Unit Tests
 
-**How to run tests from the terminal**
+The `tests` folder contains two files:
+- `test_classify_function.py`
+- `test_classify_function_typecheck.py`
 
-```bash
-pytest
-```
-
-**How to run tests in VS Code**
-
-- Open the **Testing** panel (beaker icon).
-- If prompted, choose **Python: Configure Tests** → **pytest** → test folder `tests/`.
-- Click **Run All Tests**.
+The `test_classify_function.py` file provides some positive tests including the edge cases above. The other file does type-checking. We'll have more to say about type-checking shortly. 
 
 ---
 
@@ -182,7 +134,9 @@ Return one of the following strings:
 - `"partial function"` if the relation maps some (but not all) domain elements to codomain elements, without duplication
 - `"not a function"` if any domain element maps to more than one codomain element
 
-Run tests with:
+The Python function you write must pass each tests. Note that the elements of each set can be either an integer or a string. You can see this in the type hings in the function definition. For example, `domain: set[int | str]`. The vertical `|` represents a logical _or_, so the Python variable `domain` is supposed to be either an integer or a string. 
+
+Complete the Python function in `classify_function.py` so that it passes each test.
 
 ```bash
 pytest

@@ -1,4 +1,5 @@
 import pytest
+
 from homework2.classify_function import classify_function
 
 #########################
@@ -6,7 +7,7 @@ from homework2.classify_function import classify_function
 #########################
 
 # ⚠️ Type-check: input key not in domain
-def test_classify_function_key_not_in_domain():
+def test_classify_function_key_not_in_domain() -> None:
     # Inputs
     f = {(4, 'a')}  # 4 not in domain
     domain = {1, 2, 3}
@@ -17,7 +18,7 @@ def test_classify_function_key_not_in_domain():
         classify_function(f, domain, codomain)
 
 # ⚠️ Type-check: output value not in codomain
-def test_classify_function_value_not_in_codomain():
+def test_classify_function_value_not_in_codomain() -> None:
     # Inputs
     f = {(1, 'x')}  # 'x' not in codomain
     domain = {1}
@@ -28,7 +29,7 @@ def test_classify_function_value_not_in_codomain():
         classify_function(f, domain, codomain)
 
 # ⚠️ Type-check: domain contains invalid type
-def test_classify_function_invalid_domain_type():
+def test_classify_function_invalid_domain_type() -> None:
     # Inputs
     f = {(1, 'a')}
     domain = {1, 2, 3.14}  # float is invalid
@@ -39,7 +40,7 @@ def test_classify_function_invalid_domain_type():
         classify_function(f, domain, codomain)
 
 # ⚠️ Type-check: codomain contains invalid type
-def test_classify_function_invalid_codomain_type():
+def test_classify_function_invalid_codomain_type() -> None:
     # Inputs
     f = {(1, 'a')}
     domain = {1}
@@ -50,7 +51,7 @@ def test_classify_function_invalid_codomain_type():
         classify_function(f, domain, codomain)
 
 # ⚠️ Type-check: mapping contains invalid tuple value
-def test_classify_function_invalid_mapping_type():
+def test_classify_function_invalid_mapping_type() -> None:
     # Inputs
     f = {(1, 2.71)}  # float is invalid
     domain = {1}
