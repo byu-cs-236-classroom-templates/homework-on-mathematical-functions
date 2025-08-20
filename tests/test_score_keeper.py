@@ -1,20 +1,34 @@
 from homework2.score_keeper import ScoreKeeper
 
 
-def test_add_points_updates_score_and_returns_correct_value() -> None:
-    # 1. Instantiate the object
-    keeper = ScoreKeeper()
+def test_add_points() -> None:
+    # Step 1: Instantiate
+    score_keeper_object = ScoreKeeper()
 
-    # 2. Set the member variable that is used in the function
-    keeper.multiplier = 2
+    ###############################
+    ## Specify inputs from domain #
+    ###############################
+    # Step 3: Specity the input
+    input = 2
+    # Step 4: Set state in the object
+    score_keeper_object.total_score = 10
+    score_keeper_object.multiplier = 3
 
-    # 3. Call the function with a test argument
-    return_value = keeper.add_points(5)
+    #########################################
+    ## Specify expected outputs in codomain #
+    #########################################
+    # Step 5: Specify expected number of points returned by function
+    expected_return = 6
+    # Step 6: Specify expected change in internal state
+    expected_total_score = 16
 
-    # 4. Compare return value to expected value (points added this call)
-    expected_added_points = 10  # 5 * multiplier(2)
-    assert return_value == expected_added_points
+    # Step 7: Call object method
+    returned = score_keeper_object.add_points(input)
 
-    # 5. Compare modified member variable with expected value
-    expected_total_score = 10
-    assert keeper.total_score == expected_total_score
+    #######################################
+    ## Check values returned by function ##
+    #######################################
+    # Step 8: Check return value
+    assert returned == expected_return
+    # Step 9: Check modified state
+    assert score_keeper_object.total_score == expected_total_score
