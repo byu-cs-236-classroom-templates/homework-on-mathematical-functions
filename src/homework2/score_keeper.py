@@ -1,9 +1,9 @@
 class ScoreKeeper:
-    def __init__(self) -> None:
+    def __init__(self):
         self.multiplier = 1  # used in calculation
         self.total_score = 0  # altered in method
 
-    def add_points(self, points: int) -> int:
+    def add_points(self, points) -> int:
         """
         Add points multiplied by self.multiplier to total_score.
         Return the amount of points added in this call.

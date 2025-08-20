@@ -169,7 +169,9 @@ pytest
 
 or use the **Testing panel** in VS Code. 
 
-**Commit your code to GitHub Classroom** and use the process from Homework 1 to confirm that your code passed the autograding. Don't spend too much time on this problem if you get hung up on it. Each test case will only be worth 1 point.
+**Commit your code to GitHub Classroom** and use the process from Homework 1 to confirm that your code passed the autograding. Don't spend too much time on this problem if you get hung up on it. The points will for this problem will be 
+- 2 points if you pass all the tests in `test_classify_function.py`
+- 2 points if you pass all the tests in `test_classify_function_typechecks.py`
 
 ---
 
