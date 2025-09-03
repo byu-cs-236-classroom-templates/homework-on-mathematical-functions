@@ -7,8 +7,8 @@ In this assignment, you’ll explore key concepts from mathematics and computer 
 - How the definition of mathematical functions relates to the methods of a Python class, with an emphasis on a programming concept called **side effects**
 
 From the programming perspective, this assignment includes
-- Writing function that takes a **set of ordered pairs** and says whether the set represents a function, partial function, or neither
-- Reviewing how to run unit tests in VS Code and how to do pass-offs in GitHub Classroom.
+- Writing a function that takes a **set of ordered pairs** and says whether the set represents a function, partial function, or neither
+- Reviewing how to run unit tests in VS Code and how to do passoffs in GitHub Classroom.
 - Learning how to write unit tests when a Python class has methods that rely on or that modify class member variables.
 - Learning about using type hints in Python and how to use the `mypy` tool to check for type errors in Python.
 
@@ -56,10 +56,9 @@ homework2/
 │   └── homework2/
 │       ├── __init__.py
 |       ├── classify_function.py
-|       ├── test_classify_function_typechecks.py
 │       └── score_keeper.py
 └── tests/
-|   ├── test_classify_function_typechecks
+|   ├── test_classify_function_typechecks.py
 |   ├── test_classify_function.py
 |   └── test_score_keeper.py
 ```
@@ -72,29 +71,27 @@ We'll look at both modules in `src/homework2`, and we'll work with all the test 
 
 ### 2.1 Domain, Codomain, Cartesian Product
 The definition of a function is given in the reading from the textbook. The definition uses the following notation:
-- $D$ is the **domain** (a set of inputs),
-- $C$ be the **codomain** (a set of possible outputs), and
-- $f$ is a **mapping** represented as a set of ordered pairs $ f \subseteq D \times C $
+- _D_ is the **domain** (a set of inputs),
+- _C_ be the **codomain** (a set of possible outputs), and
+- _f_ is a **mapping** represented as a set of ordered pairs _f ⊆ D × C_
 
 
 ### 2.2 Function
 
-A mapping $ f $ is a **function** if:
+A mapping _ f _ is a **function** if:
 
-1. Every element in the domain $D$ appears exactly once as the first element of a pair in $ f $
+1. Every element in the domain _D_ appears exactly once as the first element of a pair in _f_
 2. Each domain element maps to **exactly one** codomain element
 
 In other words, _every input has one and only one output_.
 
-Notice that we are defining the function using a subset of ordered pairs. For example, for domain $D = \{1,2\}$ and codomain $C = \{\text{'a'},\text{'b'}\}$, we can define a mapping as $f = \{(1,\text{'a'}), (2,\text{'b'})\}$ which is a subset of all the possible ordered pairs that could appear in the Cartesian product $D\times C$. This function maps `1 → 'a'` and `2 → 'b'`. You might be most familiar with writing this function as
-$$
-     f(1) = \text{'a'}\\
-     f(2) = \text{'b'}
-$$
-The first element of the ordered pair goes inside the parentheses and the second element of the ordered pair is the value that the function produces,
-$$
-   f(\text{ first element } ) =  \text{second element}
-$$
+Notice that we are defining the function using a subset of ordered pairs. For example, for domain _D = {1, 2}_ and codomain _C = {'a', 'b'}_, we can define a mapping as _f = {(1,'a'), (2,'b')}_ which is a subset of all the possible ordered pairs that could appear in the Cartesian product _D × C_. This function maps `1 → 'a'` and `2 → 'b'`. You might be most familiar with writing this function as
+
+- _f(1) = 'a'_
+- _f(2) = 'b'_
+  
+The first element of the ordered pair goes inside the parentheses and the second element of the ordered pair is the value that the function produces, _f(first element) =  second element_.
+
 
 This mapping is a function because
 - Both elements of the domain appear as the first element of the ordered pair
@@ -103,41 +100,37 @@ This mapping is a function because
 
 ### 2.3 Partial Function
 
-A mapping $ f $ is a **partial function** if:
+A mapping _f_ is a **partial function** if:
 
-1. Some elements in $D$ may not appear in the mapping
+1. Some elements in _D_ may not appear in the mapping
 2. Every input that **is** mapped still has **exactly one** output
 
-That is, **some inputs might not be used**, but **none are duplicated**. Consider the following mapping.
-$$
-    f = \{(1, \text{'a'})\}
-$$
-The mapping is a partial function because it is defined for $1\in D$ but not for $2\in D$.
+That is, **some inputs might not be used**, but **none are duplicated**. Consider the following mapping:
+_f = {(1,'a')}_.
+The mapping is a partial function because it is defined for _1 ∈ D_ but not for _2 ∈ D_.
 
 
 ### 2.4 Not a Function
 
 A mapping is **not a function** if any input in the domain appears more than once in the mapping with different outputs.
 In other words, any single input maps to multiple values. Consider the following mapping.
-$$
-    f = \{(1,\text{'a'}), (1,\text{'b'})\}
-$$
-The mapping is not a function because $1\in D$ is in the first spot in two of the ordered pairs so $f(1)$ is non-deterministic as it can be either $'a'$ or $'b'$ at any time.
+_f = {(1,'a'), (1,'b')}_.
+The mapping is not a function because _1 ∈ D_ is in the first spot in two of the ordered pairs so _f(1)_ can be either _'a'_ or _'b'_ at any time.
 
 ### 2.5 Edge Cases
 
 You are going to write a Python function that takes a set of ordered pairs and classifies it as a function, partial function, or neither. That Python function needs to handle the following two edge cases.
 
-1. $D=\emptyset$, $C \neq \emptyset$, and $f = \emptyset$. The domain is empty, the codomain is not empty, and the mapping in the tuples is empty. Notice that $f$ has to be the emptyset since $D\times C = \emptyset \times C = \emptyset$, and the only subset of the empty set is the empty set itself.
+1. _D=∅_, _C ≠ ∅_, and f = ∅_. The domain is empty, the codomain is not empty, and the mapping in the tuples is empty. Notice that _f_ has to be the empty set since _D × C = ∅ × C = ∅_, and the only subset of the empty set is the empty set itself.
 
-    The mapping $f$ in this problem **is a function** because each element of the domain appears only once in $f$, which is _vacuously_ true since both $D == f = \emptyset$. Vacuously true means that there are no elements to check. This reasoning can be a little tricky so we'll return to it later in the class when we discuss propositional logic and quantification.
-1. $D\neq \emptyset$, $C \neq\emptyset$, $f = \emptyset$. The domain is not empty, the codomain is not empty, but the mapping is empty.
+    The mapping _f_ in this problem **is a function** because each element of the domain appears only once in _f_, which is _vacuously_ true since both _D_ and _f_ are empty. Vacuously true means that there are no elements to check. This reasoning can be a little tricky so we'll return to it later in the class when we discuss propositional logic and quantification.
+1. _D  ≠ ∅_, _C  ≠ ∅_, _f = ∅_. The domain is not empty, the codomain is not empty, but the mapping is empty.
 
-   The mapping $f$ in this problem **is a partial function** because there are elements of the domain that do not appear in the tuples in $f$ (since there are no tuples in $f$).
+   The mapping _f_ in this problem **is a partial function** because there are elements of the domain that do not appear in the tuples in _f_ (since there are no tuples in _f_). 
 
-1. $D\neq \emptyset$, $C =\emptyset$, $f = \emptyset$. The domain is not empty, the codomain is empty, and the mapping $f$ is empty.
+1. _D  ≠ ∅_, _C =∅_, _f = ∅_. The domain is not empty, the codomain is empty, and the mapping _f_ is empty.
 
-    The mapping $f$ in this problem **is a partial function** for the same reason as the example just above.
+    The mapping _f_ in this problem **is a partial function** for the same reason as the example just above. You wouldn't label _f_ as 'not a function' because no domain element maps to _to_ outputs; rather, no elements map at all.
 
 ---
 
@@ -152,7 +145,7 @@ Return one of the following strings:
 - `"partial function"` iff the relation maps some (but not all) domain elements to codomain elements, without duplication
 - `"not a function"` iff any domain element maps to more than one codomain element
 
-The Python function you write must pass all tests. Note that the elements of each set can be either an integer or a string. You can see this in the type hints in the function definition. For example, `domain: set[int | str]`. The vertical `|` represents a logical _or_, so the Python variable `domain` is supposed to be either an integer or a string.
+The Python function you write must pass all tests. Note that the elements of each set can be either an integer or a string. You can see this in the type hints in the function definition. For example, `domain: set[int | str]`. The vertical `|` represents a logical _or_ and indicates that _either type_ is allowed,  so the Python variable `domain` must be a set containing either integers or strings.
 
 **Complete the Python function** in `classify_function.py` so that it passes each test. When you push your code to GitHub Classroom, the auto-grader will run all tests in the following files to determine your score:
 - `test_classify_function.py`
@@ -371,7 +364,7 @@ Thus, the `add_points` function maps
 (points, self.multiplier, self.total_score) ↦ (added_points, self.total_score)
 ```
 
-- **Domain**: pairs `(points, self.multiplier, self.total_score)`
+- **Domain**: triples `(points, self.multiplier, self.total_score)`
 - **Codomain**: pairs `(added_points, self.total_score)`
 
 ### 5.2 Why This Matters
@@ -392,25 +385,23 @@ When testing methods that modify object state **and** return values, you need to
 ### 6.1 Example
 For example, the `ScoreKeeper` function uses `self.multiplier` as part of its input, `self.total_score` as part of its input, and it modifies both `added_points` and `self.total_score` as part of its output. We need to write tests that work for all elements of the domain and codomain.
 
-Let's write a test. Begin by doing the math first. Suppose that the the current total score is 10 and the multiplier is set to 3. Then an input of 2 points should yield
+Let's write a test. Begin by doing the math first. Suppose that the current total score is 10 and the multiplier is set to 3. Then an input of 2 points should yield
 
-$$
-    \begin{array}{rcl}
-        \text{added\_points} &=& (\text{points})(\text{self.multiplier}) \\
-        &=&  (2)(3) \\
-        &=& 6
-    \end{array}
-$$
-So the expected number of added points should be 6.
+| Expression       |   =   | Result               |
+|------------------|-------|----------------------|
+| `added_points`     |   =   | (`points`)(`multiplier`) |
+|                  |   =   | (2)(3)               |
+|                  |   =   | 6                    |
+
+Therefore, `add_points(2)` should return `6` and update `total_score` to `16`.
 
 The current total score is computed as
-$$
-    \begin{array}{rcl}
-        \text{new\_total\_score} &=& \text{old\_total\_score} + (\text{points})(\text{self.multiplier}) \\
-        &=&  10 + (2)(3) \\
-        &=& 16
-    \end{array}
-$$
+
+| Expression        |   =   | Result                                |
+|-------------------|-------|---------------------------------------|
+| `new_total_score`   |   =   | `old_total_score` + (`points`)(`multiplier`) |
+|                   |   =   | 10 + (2)(3)                           |
+|                   |   =   | 16                                    |
 
 ```python
 def test_add_points() -> None:
@@ -475,4 +466,4 @@ In other words:
 
 Both must be tested to ensure correctness.
 
-> 💡 *Tip*: Do the math or logic on paper before you write the code. This math or logic should compute both the return value and the updated state. That way, your test documents not only what your code does, but also the reasoning behind why those results are correct. This is called **test-driven development** (TDD).
+> *Tip*: Do the math or logic on paper before you write the code. This math or logic should compute both the return value and the updated state. That way, your test documents not only what your code does, but also the reasoning behind why those results are correct. This is called **test-driven development** (TDD).
