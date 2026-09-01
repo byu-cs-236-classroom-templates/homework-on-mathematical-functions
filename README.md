@@ -8,7 +8,7 @@ In this assignment, you’ll explore key concepts from mathematics and computer 
 
 From the programming perspective, this assignment includes
 - Writing a function that takes a **set of ordered pairs** and says whether the set represents a function, partial function, or neither
-- Reviewing how to run unit tests in VS Code and how to do passoffs in GitHub Classroom.
+- Reviewing how to run unit tests in VS Code and how to do passoffs in Classroom50.
 - Learning how to write unit tests when a Python class has methods that rely on or that modify class member variables.
 - Learning about using type hints in Python and how to use the `mypy` tool to check for type errors in Python.
 
@@ -39,7 +39,7 @@ From the programming perspective, this assignment includes
 ---
 
 ## 1. Programming Environment for Homework 2
-Clone the project into VS Code and configure it by doing the following steps:
+Accept Assignment 2 from Classroom50, clone the project into VS Code, and configure the project by doing the following steps:
 - install and activate `venv`
 - install the project (e.g., `pip install --editable ".[dev]"`)
 - configure VS Code so that it can run tests by
