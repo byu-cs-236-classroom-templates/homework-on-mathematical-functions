@@ -121,7 +121,7 @@ The mapping is not a function because _1 ∈ D_ is in the first spot in two of t
 
 You are going to write a Python function that takes a set of ordered pairs and classifies it as a function, partial function, or neither. That Python function needs to handle the following two edge cases.
 
-1. _D=∅_, _C ≠ ∅_, and f = ∅_. The domain is empty, the codomain is not empty, and the mapping in the tuples is empty. Notice that _f_ has to be the empty set since _D × C = ∅ × C = ∅_, and the only subset of the empty set is the empty set itself.
+1. _D=∅_, _C ≠ ∅_, and _f = ∅_. The domain is empty, the codomain is not empty, and the mapping in the tuples is empty. Notice that _f_ has to be the empty set since _D × C = ∅ × C = ∅_, and the only subset of the empty set is the empty set itself.
 
     The mapping _f_ in this problem **is a function** because each element of the domain appears only once in _f_, which is _vacuously_ true since both _D_ and _f_ are empty. Vacuously true means that there are no elements to check. This reasoning can be a little tricky so we'll return to it later in the class when we discuss propositional logic and quantification.
 1. _D  ≠ ∅_, _C  ≠ ∅_, _f = ∅_. The domain is not empty, the codomain is not empty, but the mapping is empty.
@@ -130,7 +130,7 @@ You are going to write a Python function that takes a set of ordered pairs and c
 
 1. _D  ≠ ∅_, _C =∅_, _f = ∅_. The domain is not empty, the codomain is empty, and the mapping _f_ is empty.
 
-    The mapping _f_ in this problem **is a partial function** for the same reason as the example just above. You wouldn't label _f_ as 'not a function' because no domain element maps to _to_ outputs; rather, no elements map at all.
+    The mapping _f_ in this problem **is a partial function** for the same reason as the example just above. You wouldn't label _f_ as 'not a function' because no domain element maps to _two_ outputs; rather, no elements map at all.
 
 ---
 
@@ -147,15 +147,15 @@ Return one of the following strings:
 
 The Python function you write must pass all tests. Note that the elements of each set can be either an integer or a string. You can see this in the type hints in the function definition. For example, `domain: set[int | str]`. The vertical `|` represents a logical _or_ and indicates that _either type_ is allowed,  so the Python variable `domain` must be a set containing either integers or strings.
 
-**Complete the Python function** in `classify_function.py` so that it passes each test. When you push your code to GitHub Classroom, the auto-grader will run all tests in the following files to determine your score:
+**Complete the Python function** in `classify_function.py` so that it passes each test. When you push your code to Classroom50, the auto-grader will run all tests in the following files to determine your score:
 - `test_classify_function.py`
 - `test_classify_function_typecheck.py`
 
 The `test_classify_function.py` file provides some positive tests including the edge cases above. The other file does type-checking. We'll have more to say about type-checking shortly.
 
-You can run all the tests in the project with `pytest`, or you can use the **Testing panel** in VS Code.
+You can run all the tests in the project from the command line with `pytest`, or you can use the **Testing panel** in VS Code.
 
-Once you have a working solution, you can **commit your code to GitHub Classroom** and use the process from Homework 1 to confirm that your code passes the auto-grading. Don't spend too much time on this problem if you get hung up on it. Here are the point allocations:
+Once you have a working solution, you can **commit your code to Classroom50** and use the process from Homework 1 to confirm that your code passes the auto-grading. Don't spend too much time on this problem if you get hung up on it. Here are the point allocations:
 - 2 points if you pass all the tests in `test_classify_function.py`
 - 2 points if you pass all the tests in `test_classify_function_typechecks.py`
 
@@ -173,7 +173,7 @@ You probably thought writing all the type-checking hints was a bit of a pain, ev
 - Reduces the need for many runtime type-checking tests
 - Plays well with VS Code (inline diagnostics, quick jumps)
 
-Bottom line, type checkers reduce code defects that lead to emergent, unexpected, behavior and make it easier to maintain code through its lifecycle especially code that is touched by teams of developers.
+The bottom line is type checkers reduce code defects that lead to emergent, unexpected behavior and make it easier to maintain code through its lifecycle especially code that is touched by a team of developers.
 
 ### 4.2 How to run mypy
 
@@ -218,7 +218,7 @@ class ScoreKeeper:
         return added_points
 ```
 
-In VS Code, you should see red squiggly lines under the code where type hints are missing. Those lines tell you where mypy found type errors. The squiggly lines provide the same information that was printed out when you ran `mypy` from the command line.
+In VS Code, you should see red squiggly lines under the code where type hints are missing. Those lines tell you where `mypy` found type errors. The squiggly lines provide the same information that was printed out when you ran `mypy` from the command line.
 
 Mouse over the squiggly line under
 ```python
@@ -372,7 +372,7 @@ Thus, the `add_points` function maps
 Hidden state changes (side effects) can cause defects, especially across multiple calls or shared objects. One reason that defects can appear is that it is not always clear what side effects are occurring, and that means the programmer can forget and make a mistake. More critically, the behavior of the function changes over time because it side-effects hidden state. That means that it doesn't always return the same thing when given the same arguments because of the role of the hidden state.
 
 ### 5.3 Functional Programming
-There are good reasons for programmers to use hidden state, like when we want to use a variable that is global for an entire class. In fact, that is one of the benefits of object-oriented programming. So we are not arguing that you should never do this.
+There are good reasons for programmers to use hidden state, like when we want to use a variable that is global for an entire class. In fact, that is one of the benefits of object-oriented programming, wo we are not arguing that you should never do this.
 
 Instead, we are showing a programming style that is more **function-based**, which means that the domain and codomain of the function are always explicit in the input arguments and return values. Most of the **starter code** for this class will avoid having side effects. For some of you, this will be a bit awkward because it requires the code to be explicit about the codomain at all times.
 
