@@ -89,7 +89,7 @@ Notice that we are defining the function using a subset of ordered pairs. For ex
 
 - _f(1) = 'a'_
 - _f(2) = 'b'_
-  
+
 The first element of the ordered pair goes inside the parentheses and the second element of the ordered pair is the value that the function produces, _f(first element) =  second element_.
 
 
@@ -126,7 +126,7 @@ You are going to write a Python function that takes a set of ordered pairs and c
     The mapping _f_ in this problem **is a function** because each element of the domain appears only once in _f_, which is _vacuously_ true since both _D_ and _f_ are empty. Vacuously true means that there are no elements to check. This reasoning can be a little tricky so we'll return to it later in the class when we discuss propositional logic and quantification.
 1. _D  ≠ ∅_, _C  ≠ ∅_, _f = ∅_. The domain is not empty, the codomain is not empty, but the mapping is empty.
 
-   The mapping _f_ in this problem **is a partial function** because there are elements of the domain that do not appear in the tuples in _f_ (since there are no tuples in _f_). 
+   The mapping _f_ in this problem **is a partial function** because there are elements of the domain that do not appear in the tuples in _f_ (since there are no tuples in _f_).
 
 1. _D  ≠ ∅_, _C =∅_, _f = ∅_. The domain is not empty, the codomain is empty, and the mapping _f_ is empty.
 
@@ -372,7 +372,7 @@ Thus, the `add_points` function maps
 Hidden state changes (side effects) can cause defects, especially across multiple calls or shared objects. One reason that defects can appear is that it is not always clear what side effects are occurring, and that means the programmer can forget and make a mistake. More critically, the behavior of the function changes over time because it side-effects hidden state. That means that it doesn't always return the same thing when given the same arguments because of the role of the hidden state.
 
 ### 5.3 Functional Programming
-There are good reasons for programmers to use hidden state, like when we want to use a variable that is global for an entire class. In fact, that is one of the benefits of object-oriented programming, wo we are not arguing that you should never do this.
+There are good reasons for programmers to use hidden state, like when we want to use a variable that is global for an entire class. In fact, that is one of the benefits of object-oriented programming; we are not arguing that you should never do this.
 
 Instead, we are showing a programming style that is more **function-based**, which means that the domain and codomain of the function are always explicit in the input arguments and return values. Most of the **starter code** for this class will avoid having side effects. For some of you, this will be a bit awkward because it requires the code to be explicit about the codomain at all times.
 
@@ -440,7 +440,7 @@ def test_add_points() -> None:
 
 When we run `pytest` either from the command line
 ```bash
-tests/test_score_keeper.py
+pytest tests/test_score_keeper.py
 ```
 or from within the Testing Panel, we see that the test passed.
 
