@@ -1,0 +1,32 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "ignorePaths": [
+    ".devcontainer/",
+    ".pre-commit-config.yaml",
+    ".gitignore",
+    "pyproject.toml"
+  ],
+  "words": [
+    "Codomain",
+    "codomains",
+    "configfile",
+    "Datalog",
+    "docstrings",
+    "doctest",
+    "doctests",
+    "fsms",
+    "learningsuite",
+    "myproject",
+    "mypy",
+    "Mypyno",
+    "passoff",
+    "passoffs",
+    "pluggy",
+    "pyproject",
+    "pytest",
+    "rootdir",
+    "typechecks",
+    "venv"
+  ]
+}
