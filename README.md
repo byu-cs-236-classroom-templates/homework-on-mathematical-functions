@@ -8,7 +8,7 @@ In this assignment, you’ll explore key concepts from mathematics and computer 
 
 From the programming perspective, this assignment includes
 - Writing a function that takes a **set of ordered pairs** and says whether the set represents a function, partial function, or neither
-- Reviewing how to run unit tests in VS Code and how to do passoffs in Classroom50.
+- Reviewing how to run unit tests in VS Code.
 - Learning how to write unit tests when a Python class has methods that rely on or that modify class member variables.
 - Learning about using type hints in Python and how to use the `mypy` tool to check for type errors in Python.
 
@@ -147,7 +147,7 @@ Return one of the following strings:
 
 The Python function you write must pass all tests. Note that the elements of each set can be either an integer or a string. You can see this in the type hints in the function definition. For example, `domain: set[int | str]`. The vertical `|` represents a logical _or_ and indicates that _either type_ is allowed,  so the Python variable `domain` must be a set containing either integers or strings.
 
-**Complete the Python function** in `classify_function.py` so that it passes each test. When you push your code to Classroom50, the auto-grader will run all tests in the following files to determine your score:
+**Complete the Python function** in `classify_function.py` so that it passes each test:
 - `test_classify_function.py`
 - `test_classify_function_typecheck.py`
 
@@ -155,10 +155,7 @@ The `test_classify_function.py` file provides some positive tests including the 
 
 You can run all the tests in the project from the command line with `pytest`, or you can use the **Testing panel** in VS Code.
 
-Once you have a working solution, you can **commit your code to Classroom50** and use the process from Homework 1 to confirm that your code passes the auto-grading. Don't spend too much time on this problem if you get hung up on it. Here are the point allocations:
-- 2 points if you pass all the tests in `test_classify_function.py`
-- 2 points if you pass all the tests in `test_classify_function_typechecks.py`
-
+Once you have a working solution, you can **commit your code to Classroom50**.
 ---
 
 ## 4. mypy: Static Type Checking
