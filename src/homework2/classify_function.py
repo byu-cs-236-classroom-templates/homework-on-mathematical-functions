@@ -1,7 +1,7 @@
 def classify_function(
     mapping: set[tuple[int | str, int | str]],
     domain: set[int | str],
-    codomain: set[int | str]
+    codomain: set[int | str],
 ) -> str:
     """
     Classifies the mapping as 'function', 'partial function', or 'not a function'
@@ -13,7 +13,7 @@ def classify_function(
         codomain (set[int | str]): The full set of possible outputs.
 
     Returns:
-        str: 'function' if the mapping is a function, 
+        str: 'function' if the mapping is a function,
              'partial function' if it is a partial function,
              'not a function' if it does not satisfy the criteria of a function.
     """
